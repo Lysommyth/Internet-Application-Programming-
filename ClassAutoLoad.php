@@ -1,8 +1,11 @@
 <?php
-//Load Composer's autoloader (created by composer, not included with PHPMailer)
-
-require 'Plugins/phpmailer/vendor/autoload.php';
+require_once 'Database.php';
 require_once 'conf.php';
+
+$database = new Database($conf);
+$db = $database->connect();
+
+
 $directories = ["Forms", "Layouts", "Global"];
 
 spl_autoload_register(function ($className) use ($directories) {
@@ -13,9 +16,15 @@ spl_autoload_register(function ($className) use ($directories) {
             return;
         }
     }
+    throw new Exception("Class '$className' not found in: " . implode(', ', $directories));
 });
 
-// create an instance of HelloWorld
-$ObjsendMail = new sendMail();
-$form = new forms();
-$layout = new layouts();
+// Initialize core objects
+try {
+    $ObjsendMail = new sendMail();
+    $form = new forms();
+    $layout = new layouts();
+} catch (Exception $e) {
+    die("Error initializing classes: " . $e->getMessage());
+}
+?>
