@@ -1,6 +1,6 @@
 <?php
 
-require_once 'ClassAutoLoad.php';
+require_once 'AutoLoad.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
@@ -13,12 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
     
     // Save user directly to database without verification token
+    $conn = $db->getConnection();
     try {
-        $stmt = $db->prepare("INSERT INTO users (username, email, password, is_verified) VALUES (?, ?, ?, 1)");
+        $stmt = $conn->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
         $stmt->execute([$userName, $userEmail, $passwordHash]);
         
         // Redirect to success page immediately
-        header('Location: signup_success.php');
+        //header('Location: signup_success.php');
         exit();
         
     } catch (PDOException $e) {

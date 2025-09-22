@@ -1,4 +1,7 @@
-<?php require_once'ClassAutoload.php';
+<?php require_once'Autoload.php';
+$name = $_POST['username'];
+$email = $_POST['email'];
+$password = $_POST['password'];
 
 $mailCnt=[
     'name_from'=>'ICS C Community',
